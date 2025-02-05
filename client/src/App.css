@@ -1,42 +1,143 @@
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.app{
+  background-color: #eaedef;
+  height: 100vh;
+  width: 100%;
+  display: flex;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.sidebar{
+  width: 40vh;
+  background-color: white;
+  height: 100%;
+  border-right: 1.5px solid #d1d1d1;
+  padding: 30px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.logo{
+  color: blue;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.nav{
+  width: 100%;
 }
 
-.card {
-  padding: 2em;
+.nav-pills{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
 }
 
-.read-the-docs {
-  color: #888;
-} */
+.nav-item{
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.nav-item:hover .nav-link{
+  color: blue;
+}
+
+.nav-link{
+  margin: 0;
+  padding: 5px 12px;
+  color: #676767;
+}
+
+.nav-item.active{
+  background-color: rgb(234, 234, 234);
+
+}
+
+.nav-item.active .nav-link{
+  color: blue;
+}
+
+.main{
+  flex: 1;
+  height: 100%;
+}
+
+.header{
+  width: 100%;
+  height: 55px;
+  background-color: white;
+  border-bottom: 1.5px solid #d1d1d1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profil{
+  background-color: #d1d1d1;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.separator{
+  width: 1px;
+  height: 30px;
+  background-color: red;
+}
+
+.mainFil{
+  display: flex;
+  justify-content: space-between;
+}
+
+.left{
+  width: 70%;
+}
+
+.makepost{
+  width: 100%;
+  background-color: white;
+}
+
+.makepost form input{
+  background-color: #eaedef;
+  border-radius: 15px;
+  border: none;
+  padding-left: 20px;
+}
+
+.makepost form input::placeholder {
+  color: rgb(31, 31, 31);
+  opacity: 0.5;
+}
+
+.makepost .buttons .make-button{
+  padding: 0;
+}
+
+.makepost .buttons .make-button i{
+  font-size: 15px;
+  color: #6c6c6c;
+}
+
+.makepost .btn-post{
+  padding: 3px 10px;
+  border-color: #a5a5a5;
+}
+.listPosts{
+  width: 100%;
+}
+
+.post{
+  width: 100%;
+}
+
+.post .username{
+  font-size: 15px;
+}
+
+.post .time{
+  font-size: 12px;
+  opacity: .7;
+}
