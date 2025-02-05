@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Header() {
   return (
     <div className='header container px-4'>
@@ -12,7 +14,9 @@ function Header() {
           </span>
         </div>
         <div className='separator'></div>
-        <button className='btn btn-danger btn-sm'>Se déconnecter</button>
+        <Link to="/login" className="btn btn-danger btn-sm">
+          Se déconnecter
+        </Link>
       </div>
     </div>
   )
