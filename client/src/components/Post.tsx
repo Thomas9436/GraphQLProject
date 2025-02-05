@@ -33,7 +33,7 @@ function Post() {
                 </div>
             </div>
             <div className='commentaires mt-2'>
-                <h6 style={{fontSize: '13px'}}>Commentaires <i className="fa-solid fa-angle-down"></i></h6>
+                <h6 style={{fontSize: '13px'}}>12 commentaires <i className="fa-solid fa-angle-down"></i></h6>
                 <div className="liste-comment px-2">
                     <div className='comment d-flex gap-2'>
                         <p className='p-0 m-0'>

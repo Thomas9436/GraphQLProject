@@ -10,7 +10,7 @@ function MainFil() {
         </div>
         <div className="right pt-4">
             <div className="filter rounded shadow p-3">
-                <h6 className="p-0 m-0">Filtre</h6>
+                <h6 className="p-0 m-0"><i className="fa-solid fa-filter"></i> Filtrer par</h6>
                 <hr />
                 <div className="form-check">
                     <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />

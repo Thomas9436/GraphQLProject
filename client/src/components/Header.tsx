@@ -2,7 +2,7 @@ import React from 'react'
 
 function Header() {
   return (
-    <div className='header container px-4'>
+    <div className='header px-4'>
         <span className=''>
             <i className="fa-solid fa-house"></i> Home
         </span>
