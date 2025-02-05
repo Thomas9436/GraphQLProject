@@ -131,6 +131,7 @@
 
 .post{
   width: 100%;
+  background-color: white;
 }
 
 .post .username{
@@ -140,4 +141,8 @@
 .post .time{
   font-size: 12px;
   opacity: .7;
+}
+
+.post-text{
+  font-size: 14px;
 }
