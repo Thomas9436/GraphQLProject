@@ -4,16 +4,43 @@ export const typeDefs = gql `
 
     type Query {
         loggedUser: User
-        getArticles: [Article!]!
-        getArticle(id: ID!): Article
+        getArticles: GetArticlesResponse
+        getArticleById(id: ID!): GetArticleByIdResponse
     }
 
     type Mutation {
         createUser(username: String!, password: String!): CreateUserResponse
         signIn(username: String!, password: String!): SignInUserResponse
         createArticle(title: String!, content: String!): CreateArticleResponse
-        updateArticle(id: ID!, title: String, content: String): Article!
-        deleteArticle(id: ID!): Boolean!
+        updateArticle(id: ID!, title: String, content: String): UpdateArticleResponse
+        deleteArticle(id: ID!): DeleteArticleResponse
+    }
+
+    type GetArticleByIdResponse {
+        code: Int!
+        success: Boolean!
+        message: String!
+        article: Article
+    }
+
+    type GetArticlesResponse {
+        code: Int!
+        success: Boolean!
+        message: String!
+        articles: [Article!]!
+    }
+
+    type DeleteArticleResponse {
+        code: Int!
+        success: Boolean!
+        message: String!
+    }
+
+    type UpdateArticleResponse {
+        code: Int!
+        success: Boolean!
+        message: String!
+        article: Article
     }
 
     type CreateArticleResponse {

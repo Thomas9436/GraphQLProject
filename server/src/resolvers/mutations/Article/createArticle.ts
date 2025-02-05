@@ -20,10 +20,7 @@ export const createArticle: MutationResolvers["createArticle"] = async (_, { tit
         },
         include: { author: true },
       });
-
-      console.log('article => ', article);
-      
-  
+        
       return {
         code: 200,
         message: "Article créé avec succès",
