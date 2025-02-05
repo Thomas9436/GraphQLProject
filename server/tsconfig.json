@@ -1,13 +1,15 @@
 {
-    "compilerOptions": {
-      "rootDirs": ["src"],
-      "outDir": "dist",
-      "lib": ["es2020"],
-      "target": "es2020",
-      "module": "esnext",
-      "moduleResolution": "node",
-      "esModuleInterop": true,
-      "strict": true,
-      "types": ["node"]
-    }
-  }
+  "compilerOptions": {
+    "rootDir": "./src",  // Dossier source
+    "outDir": "./dist",  // Dossier de sortie pour les fichiers compilés
+    "lib": ["es2020"],    // Bibliothèques JavaScript utilisées
+    "target": "es2020",   // Cible la version ES2020 de JavaScript
+    "module": "esnext",   // Utilise le module ESNext
+    "moduleResolution": "node",  // Résolution des modules comme en Node.js
+    "esModuleInterop": true,  // Permet l'importation de modules CommonJS dans les modules ES
+    "strict": true,  // Active les vérifications strictes de TypeScript
+    "types": ["node"]  // Inclut les types de Node.js
+  },
+  "include": ["src/**/*"],  // Inclure tous les fichiers .ts sous 'src'
+  "exclude": ["node_modules"]  // Exclure le dossier node_modules
+}

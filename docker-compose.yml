@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./server:/app
+      - prisma-data:/app/prisma  # Utilisation d'un volume pour stocker la base de données SQLite
+    environment:
+      - DATABASE_URL=sqlite:/app/prisma/dev.db  # L'URL de la base de données
+    networks:
+      - mynetwork
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    ports:
+      - "8081:80"  # Changez le port pour éviter les conflits
+    depends_on:
+      - server
+    environment:
+      - REACT_APP_API_URL=http://server:4000  # Utilisation du service 'server'
+    networks:
+      - mynetwork
+
+  sqliteweb:
+    image: tomdesinto/sqliteweb
+    container_name: sqliteweb
+    ports:
+      - "8082:8080"  # Accédez à l'interface sur http://localhost:8082
+    volumes:
+      - ./server/prisma/dev.db:/db/dev.db  # Monter votre fichier de base de données SQLite
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  prisma-data:  # Définition du volume Docker pour persister la base de données
