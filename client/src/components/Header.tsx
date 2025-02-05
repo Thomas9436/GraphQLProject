@@ -1,28 +1,21 @@
-import React from "react";
-import { FaSearch, FaBell, FaEnvelope, FaUserCircle } from "react-icons/fa";
-import '../styles/header.css';
-
-const Header: React.FC = () => {
+function Header() {
   return (
-    <header className="header">
-
-      {/* Logo ou Nom du site */}
-      <div className="logo">Touitteur</div>
-
-      {/* Barre de recherche */}
-      <div className="search-bar">
-        <FaSearch className="search-icon" />
-        <input type="text" placeholder="Rechercher..." />
+    <div className='header container px-4'>
+      <span className=''>
+        <i className="fa-solid fa-house"></i> Home
+      </span>
+      <div className='d-flex gap-2 align-items-center'>
+        <div className='d-flex gap-2 align-items-center '>
+          <h6 className='username p-0 m-0'>Abdul kodir</h6>
+          <span className='profil'>
+            <i className="fa-solid fa-user"></i>
+          </span>
+        </div>
+        <div className='separator'></div>
+        <button className='btn btn-danger btn-sm'>Se déconnecter</button>
       </div>
+    </div>
+  )
+}
 
-      {/* Icônes à droite */}
-      <div className="header-icons">
-        <FaBell className="icon" />
-        <FaEnvelope className="icon" />
-        <FaUserCircle className="icon" />
-      </div>
-    </header>
-  );
-};
-
-export default Header;
+export default Header
