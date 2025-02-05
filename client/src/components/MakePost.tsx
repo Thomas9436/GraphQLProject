@@ -3,7 +3,7 @@ import React from 'react'
 function MakePost() {
   return (
     <div className='makepost rounded shadow p-3'>
-        <div className='d-flex gap-3 '>
+        <div className='d-flex gap-2'>
             <span className='profil'>
                 <i className="fa-solid fa-user"></i>
             </span>
