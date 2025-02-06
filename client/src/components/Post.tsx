@@ -274,7 +274,7 @@ import EditArticleModal from './EditArticleModal';
             <h6 className='m-0'>{article.title}</h6>
             <p className='post-text p-0 m-0'>{article.content}</p>
         </div>
-        <img src={image1} className='post-image' alt="" />
+        <img src={'https://picsum.photos/1920/1080?random='+article.id} className='post-image' alt="" />
         <div className='post-buttons py-1 px-3 d-flex border-bottom'>
             <button 
               className={`like btn ${isLiked ? 'text-danger': ''}`} 
