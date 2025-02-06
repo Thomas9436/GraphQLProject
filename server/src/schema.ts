@@ -42,8 +42,6 @@ export const typeDefs = gql`
         success: Boolean!
         message: String!
         articles: [Article!]!
-        comments: [Comment]
-        likes: [Like]
     }
 
     type GetCommentsResponse {

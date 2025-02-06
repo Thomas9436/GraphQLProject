@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { TrackModel, AuthorModel, FilmModel, PeopleModel } from './models';
 import { DataSourceContext } from './context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -104,8 +105,6 @@ export type GetArticlesResponse = {
   __typename?: 'GetArticlesResponse';
   articles: Array<Article>;
   code: Scalars['Int']['output'];
-  comments?: Maybe<Array<Maybe<Comment>>>;
-  likes?: Maybe<Array<Maybe<Like>>>;
   message: Scalars['String']['output'];
   success: Scalars['Boolean']['output'];
 };
@@ -481,8 +480,6 @@ export type GetArticleByIdResponseResolvers<ContextType = DataSourceContext, Par
 export type GetArticlesResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['GetArticlesResponse'] = ResolversParentTypes['GetArticlesResponse']> = {
   articles?: Resolver<Array<ResolversTypes['Article']>, ParentType, ContextType>;
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  comments?: Resolver<Maybe<Array<Maybe<ResolversTypes['Comment']>>>, ParentType, ContextType>;
-  likes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Like']>>>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
