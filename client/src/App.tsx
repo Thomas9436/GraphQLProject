@@ -1,12 +1,22 @@
+import { BrowserRouter, Route, Routes } from 'react-router'
 import './App.css'
-import MainComponent from './components/MainComponent'
-import SideBar from './layout/SideBar'
+import HomeView from './views/HomeView'
+import Login from './views/Login'
+import Register from './views/Register'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   return (
-    <div className='app'>
-      <SideBar />
-      <MainComponent />
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<HomeView />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   )
 }
