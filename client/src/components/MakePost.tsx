@@ -36,8 +36,19 @@ function MakePost() {
             setErrorMessage(error.message);
         },
     });
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        createArticle({
+          variables: {
+            title,
+            content,
+          },
+        });
+    };
+
   return (
-    <form className='makepost rounded shadow p-3'>
+    <form className='makepost rounded shadow p-3' onSubmit={handleSubmit}>
         <div className='d-flex gap-2'>
             <span className='profil'>
                 <i className="fa-solid fa-user"></i>
@@ -72,12 +83,14 @@ function MakePost() {
                 <button className="make-button btn"><i className="fa-regular fa-face-smile-wink"></i></button>
             </div>
             <div>
-                <button className='btn btn-outline-dark btn-sm btn-post' type='button'>
-                    Poster <i className="fa-regular fa-paper-plane"></i>
+                <button className='btn btn-outline-dark btn-sm btn-post' type='submit'>
+                    {loading ? 'Création en cours...' : <>Poster <i className="fa-regular fa-paper-plane"></i></>}
                 </button>
             </div>
         </div>
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </form>
+    
   )
 }
 
