@@ -76,11 +76,11 @@ function MakePost() {
         </div>
         <div className='d-flex justify-content-between mt-1 pl-5'>
             <div className="buttons d-flex gap-3">
-                <button className="make-button btn"><i className="fa-solid fa-camera"></i></button>
-                <button className="make-button btn"><i className="fa-regular fa-image"></i></button>
-                <button className="make-button btn"><i className="fa-solid fa-paperclip"></i></button>
-                <button className="make-button btn"><i className="fa-solid fa-location-dot"></i></button>
-                <button className="make-button btn"><i className="fa-regular fa-face-smile-wink"></i></button>
+                <button className="make-button btn" disabled><i className="fa-solid fa-camera"></i></button>
+                <button className="make-button btn" disabled><i className="fa-regular fa-image"></i></button>
+                <button className="make-button btn" disabled><i className="fa-solid fa-paperclip"></i></button>
+                <button className="make-button btn" disabled><i className="fa-solid fa-location-dot"></i></button>
+                <button className="make-button btn" disabled><i className="fa-regular fa-face-smile-wink"></i></button>
             </div>
             <div>
                 <button className='btn btn-outline-dark btn-sm btn-post' type='submit'>

@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import image1 from "../assets/pexels-fotographiya-wedding-photography-823737813-30214743.jpg"
 import { Article as ArticleType } from '../gql/graphql';
 import { useAuth } from '../context/AuthContext';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'sonner';
+import EditCommentModal from './EditCommentModal';
+import EditArticleModal from './EditArticleModal';
 
   interface ArticleProps {
     article: ArticleType;
@@ -11,17 +13,27 @@ import { toast } from 'sonner';
   }
 
   const ADD_COMMENT_MUTATION = gql`
-    mutation AddComment($articleId: ID!, $content: String!) {
+    mutation CreateComment($articleId: ID!, $content: String!) {
       createComment(articleId: $articleId, content: $content) {
+        code
         comment {
-          id
           content
-          createdAt
           author {
             id
             username
           }
+          createdAt
+          id
         }
+        success
+        message
+      }
+    }
+  `;
+
+  const DELETE_COMMENT_MUTATION = gql`
+    mutation DeleteComment($deleteCommentId: ID!) {
+      deleteComment(id: $deleteCommentId) {
         code
         message
         success
@@ -68,6 +80,9 @@ import { toast } from 'sonner';
   `
 
   const Post: React.FC<ArticleProps> = ({ article, refetch }) => {
+    const [selectedComment, setSelectedComment] = useState<{ id: string; content: string } | null>(null);
+    const [selectedArticle, setSelectedArticle] = useState<{ id: string; title: string; content: string } | null>(null);
+    const [updateData, setUpdateData] = useState<{content: string, id: string} | null>(null)
     const { user } = useAuth();
     const [content, setContent] = useState("");
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -99,7 +114,7 @@ import { toast } from 'sonner';
 
     const [createComment, { loading: loadingComment }] = useMutation(ADD_COMMENT_MUTATION, {
       onCompleted: (data) => {
-        const response = data.addComment;
+        const response = data.createComment;
         if (response?.success) {
           console.log("Commentaire ajouté:", response.comment);
           toast.success('Commentaire ajouté avec succès')
@@ -117,12 +132,15 @@ import { toast } from 'sonner';
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       // toast.success('Commentaire ajouté avec succès')
-      createComment({
+      if(content){
+        createComment({
         variables: {
           articleId: article.id,
           content,
         },
       });
+      }
+      
     };
 
     const [likeArticle, { loading: loadingLike }] = useMutation(LIKE_ARTICLE_MUTATION, {
@@ -164,6 +182,30 @@ import { toast } from 'sonner';
     const handleDislike = () => {
       dislikeArticle({
         variables: { articleId: article.id },
+      });
+    };
+
+    const [deleteComment, { loading: loadingDeleteComment }] = useMutation(DELETE_COMMENT_MUTATION, {
+      onCompleted: (data) => {
+        if (data.deleteComment.success) {
+          console.log("Commentaire supprimé !");
+          toast.success('Commentaire supprimé avec succès')
+          refetch();
+        } else {
+          console.error("Erreur :", data.deleteComment.message);
+        }
+      },
+      onError: (error) => {
+        console.error("Erreur de suppression :", error.message);
+      },
+    });
+
+    const handleDeleteComment = (commentId: String) => {
+      toast('Voulez-vous vraiment supprimer ce commentaire ?', {
+        action: {
+          label: 'Oui',
+          onClick: () => deleteComment({ variables: { deleteCommentId: commentId } }),
+        },
       });
     };
 
@@ -214,8 +256,18 @@ import { toast } from 'sonner';
                 </div>
                 {
                   user?.id === article.author.id && 
-                  <div>
-                    <button onClick={handleDelete} disabled={loading} className='btn btn-sm btn-outline-danger'>{loading ? "Suppression..." : "Supprimer cet article"}</button>
+                  <div className=''>
+                    {selectedArticle && selectedArticle.id === article.id && (
+                      <EditArticleModal
+                        articleId={selectedArticle.id}
+                        currentTitle={selectedArticle.title}
+                        currentContent={selectedArticle.content}
+                        onClose={() => setSelectedArticle(null)}
+                        refetchArticles={refetch}
+                      />
+                    )}
+                    <button onClick={() => setSelectedArticle(article)} className='btn btn-sm btn-outline-success'>{loading ? "Suppression..." : <><i className="fa-solid fa-pen-to-square" style={{fontSize: ".9rem"}}></i> Modifier</>}</button>&nbsp;
+                    <button onClick={handleDelete} disabled={loading} className='btn btn-sm btn-outline-danger'>{loading ? "Suppression..." : <><i className="fa-solid fa-trash" style={{fontSize: ".9rem"}}></i> Supprimer</>}</button>
                   </div>
                 }
             </div>
@@ -250,16 +302,35 @@ import { toast } from 'sonner';
                     :
                     article.comments.map(comment => (
                       <div className='comment d-flex gap-2'>
-                        <p className='p-0 m-0'>
-                            <span className='fw-bold'>{comment.author.username}: </span> {comment.content}
-                        </p>
+                        <div className='d-flex justify-content-between w-100 align-items-center'>
+                          <p className='p-0 m-0 d-flex justify-content-center gap-2'>
+                              <span className='fw-bold'>{user?.id === comment.author.id ? ' Moi' : comment.author.username}: </span> 
+                              {comment.content}
+                              
+                          </p>
+                          {
+                            user?.id === comment.author.id &&
+                            <div className='d-flex btns'>
+                              <button className='btn btn-outline-success border-0' onClick={() => setSelectedComment({id: comment.id, content: comment.content})}><i className="fa-solid fa-pen-to-square" style={{fontSize: ".9rem"}}></i></button>
+                              <button className='btn btn-outline-danger border-0' onClick={() => handleDeleteComment(comment.id)} disabled={loadingDeleteComment}><i className="fa-solid fa-trash" style={{fontSize: ".9rem"}}></i></button>
+                            </div>
+                          }
+                        </div>
+                        {selectedComment && selectedComment.id === comment.id && (
+                          <EditCommentModal
+                            commentId={selectedComment.id}
+                            currentContent={selectedComment.content}
+                            onClose={() => setSelectedComment(null)}
+                            refetchComments={refetch}
+                          />
+                        )}
                       </div>
                     ))
                   }
                     
                 </div>
                 {
-                  article.comments.length !== 0 &&
+                  article.comments.length > 3 &&
                   <div className='border-top mt-3 text-center'>
                     <button className='btn text-primary btn-sm border-0 m-0 p-0 '>Voir tous les commentaires</button>
                   </div>

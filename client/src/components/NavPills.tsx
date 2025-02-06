@@ -8,7 +8,7 @@ function NavPills() {
                     <i className="fa-solid fa-house"></i> Home
                 </a>
             </li>
-            <li className="nav-item rounded">
+            {/* <li className="nav-item rounded">
                 <a className="nav-link">
                     <i className="fa-solid fa-people-group"></i> Community
                 </a>
@@ -17,7 +17,7 @@ function NavPills() {
                 <a className="nav-link">
                     <i className="fa-solid fa-arrow-trend-up"></i> Trending
                 </a>
-            </li>
+            </li> */}
         </ul>
     </nav>
   )
