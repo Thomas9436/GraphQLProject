@@ -19,9 +19,9 @@ export const createComment: MutationResolvers["createComment"] = async (_, { art
           articleId, 
         },
         include: { author: true}, 
-      });
-        
-      
+      }
+    );
+
       return {
         code: 200,
         message: "Commentaire créé avec succès",
@@ -44,6 +44,7 @@ export const createComment: MutationResolvers["createComment"] = async (_, { art
         message: "Erreur interne lors de la création du commentaire",
         success: false,
         comment: null,
+        error
       };
     }
   };

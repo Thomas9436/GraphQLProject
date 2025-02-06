@@ -32,6 +32,7 @@ model Article {
   author User @relation(fields: [authorId], references: [id])
   comments Comment[]
   likes Like[]
+  likesCount  Int      @default(0)  // Colonne pour le nombre de likes
 }
 
 model Comment {

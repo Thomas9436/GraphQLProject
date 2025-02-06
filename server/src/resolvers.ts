@@ -10,6 +10,9 @@ import { getArticleById } from "./resolvers/query/Article/getArticleById.js";
 import { createLike } from "./resolvers/mutations/Like/createLike.js";
 import { deleteLike } from "./resolvers/mutations/Like/deleteLike.js";
 import { getCommentsByArticle } from "./resolvers/query/Comment/getCommentsByArticle.js";
+import { createComment } from "./resolvers/mutations/Comment/createComment.js";
+import { deleteComment } from "./resolvers/mutations/Comment/deleteComment.js";
+import { updateComment } from "./resolvers/mutations/Comment/updateComment.js";
 
 export const resolvers: Resolvers = {
   Query: {
@@ -26,5 +29,8 @@ export const resolvers: Resolvers = {
     deleteArticle: deleteArticle,
     createLike: createLike,
     deleteLike: deleteLike,
+    createComment: createComment,
+    deleteComment: deleteComment,
+    updateComment: updateComment,
   },
 };
