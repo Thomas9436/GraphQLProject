@@ -132,7 +132,7 @@ export const typeDefs = gql`
         author: User!
         comments: [Comment!]!
         likes: [Like!]!  # Tableau des "likes" associés à cet article
-        likesCount: Int!  # Nombre de "likes" associés à cet article
+        likesCount: Int  # Nombre de "likes" associés à cet article
     }
 
     type Comment {

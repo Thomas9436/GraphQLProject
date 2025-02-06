@@ -26,7 +26,7 @@ export type Article = {
   createdAt: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   likes: Array<Like>;
-  likesCount: Scalars['Int']['output'];
+  likesCount?: Maybe<Scalars['Int']['output']>;
   title: Scalars['String']['output'];
 };
 
@@ -385,7 +385,7 @@ export type ArticleResolvers<ContextType = DataSourceContext, ParentType extends
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   likes?: Resolver<Array<ResolversTypes['Like']>, ParentType, ContextType>;
-  likesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  likesCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
