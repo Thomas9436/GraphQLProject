@@ -1,28 +1,23 @@
+import { BrowserRouter, Route, Routes } from 'react-router'
 import './App.css'
-import { Routes, Route } from "react-router-dom";
-// import SideBar from './components/SideBar.tsx';
-// import Header from './components/Header.tsx';
-import LoginView from './views/LoginView.tsx';
-import RegisterView from './views/RegisterView.tsx';
-import HomeView from './views/HomeView.tsx';
-
-
-// import MainComponent from './components/MainComponent'
-// import SideBar from './layout/SideBar'
-// import MainBox from './components/MainBox.tsx';
+import HomeView from './views/HomeView'
+import Login from './views/Login'
+import Register from './views/Register'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   return (
-    // <div className='app'>
-    //   <SideBar />
-    //   <MainComponent />
-    // </div>
-    <Routes>
-      <Route path="/" element={< HomeView/>}/>
-      <Route path="/home" element={< HomeView/>}/>
-      <Route path="/login" element={<LoginView />}/>
-      <Route path="/register" element={<RegisterView />}/>
-    </Routes>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<HomeView />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
   )
 }
 

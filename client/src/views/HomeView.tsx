@@ -1,19 +1,16 @@
-import React from "react";
-// import { FaSearch, FaBell, FaEnvelope, FaUserCircle } from "react-icons/fa";
-// import '../styles/Homeview.css';
-import MainComponent from '../components/MainComponent';
-import SideBar from '../layout/SideBar';
+import SideBar from '../layout/SideBar'
+import MainComponent from '../components/MainComponent'
+import { AuthProvider } from '../context/AuthContext'
 
-const HomeView: React.FC = () => {
-    return (
-        <>
-            <div className='app'>
-                <SideBar />
-                <MainComponent />
-            </div>
+function HomeView() {
+  return (
+    <div className='app'>
+      <AuthProvider>
+        <SideBar />
+        <MainComponent />
+      </AuthProvider>
+    </div>
+  )
+}
 
-        </>
-    );
-};
-
-export default HomeView;
+export default HomeView
