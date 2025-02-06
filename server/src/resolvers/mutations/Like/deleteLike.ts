@@ -1,4 +1,4 @@
-import { pubsub } from "../../../pubsub";
+import { pubsub } from "../../../pubsub.js";
 import { MutationResolvers } from "../../../types";
 
 export const deleteLike: MutationResolvers["deleteLike"] = async (_, { articleId }, { dataSources, user }) => {
