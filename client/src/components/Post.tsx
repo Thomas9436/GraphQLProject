@@ -39,10 +39,39 @@ import { toast } from 'sonner';
     }
   `;
 
+  const LIKE_ARTICLE_MUTATION = gql`
+    mutation CreateLike($articleId: ID!) {
+      createLike(articleId: $articleId) {
+        code
+        like {
+          articleId
+          id
+          user {
+            id
+            username
+          }
+        }
+        message
+        success
+      }
+    }
+  `;
+
+  const DISLIKE_ARTICLE_MUTATION = gql`
+    mutation DeleteLike($articleId: ID!) {
+      deleteLike(articleId: $articleId) {
+        code
+        message
+        success
+      }
+    }
+  `
+
   const Post: React.FC<ArticleProps> = ({ article, refetch }) => {
     const { user } = useAuth();
     const [content, setContent] = useState("");
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    let isLiked = article.likes.find(like => like.user.id === user?.id) ? true : false
 
     const [deleteArticle, { loading, error }] = useMutation(DELETE_ARTICLE_MUTATION, {
       onCompleted: (data) => {
@@ -87,12 +116,54 @@ import { toast } from 'sonner';
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      toast.success('Commentaire ajouté avec succès')
+      // toast.success('Commentaire ajouté avec succès')
       createComment({
         variables: {
           articleId: article.id,
           content,
         },
+      });
+    };
+
+    const [likeArticle, { loading: loadingLike }] = useMutation(LIKE_ARTICLE_MUTATION, {
+      onCompleted: (data) => {
+        if (data.createLike.success) {
+          toast.success('Vous avez liké cet article')
+          refetch()
+          
+        }else{
+          setErrorMessage(data.createLike.message);
+        }
+      },
+      onError: (error) => {
+        setErrorMessage(error.message);
+      },
+    });
+
+    const handleLike = () => {
+      likeArticle({
+        variables: { articleId: article.id },
+      });
+    };
+
+    const [dislikeArticle, { loading: loadingdisLike }] = useMutation(DISLIKE_ARTICLE_MUTATION, {
+      onCompleted: (data) => {
+        if (data.deleteLike.success) {
+          toast.success('Vous avez déliké cet article')
+          refetch()
+          
+        }else{
+          setErrorMessage(data.deleteLike.message);
+        }
+      },
+      onError: (error) => {
+        setErrorMessage(error.message);
+      },
+    });
+
+    const handleDislike = () => {
+      dislikeArticle({
+        variables: { articleId: article.id },
       });
     };
 
@@ -153,7 +224,12 @@ import { toast } from 'sonner';
         </div>
         <img src={image1} className='post-image' alt="" />
         <div className='post-buttons py-1 px-3 d-flex border-bottom'>
-            <button className='like btn'><i className="fa-regular fa-thumbs-up"></i> liker l'article <span className="badge text-bg-light rounded-pill">12</span></button>
+            <button 
+              className={`like btn ${isLiked ? 'text-danger': ''}`} 
+              onClick={isLiked ? handleDislike : handleLike} disabled={loadingLike}
+            >
+              {article.likes?.length} {isLiked ? <i className="fa-solid fa-heart"></i> : <i className="fa-regular fa-heart"></i>}
+            </button>
         </div>
         <div className='comments p-3'>
             <div className='d-flex gap-2 align-items-center'>

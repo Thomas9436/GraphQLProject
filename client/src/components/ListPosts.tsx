@@ -31,6 +31,13 @@ const GET_ARTICLES_QUERY = gql`
         id
         title
         content
+        likes {
+          user {
+            id
+          }
+          id
+          articleId
+        }
         comments {
           content
           author {
