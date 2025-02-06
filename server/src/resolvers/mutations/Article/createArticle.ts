@@ -1,4 +1,4 @@
-import { MutationResolvers } from "../../../types"
+import { MutationResolvers } from "../../../types";
 
 export const createArticle: MutationResolvers["createArticle"] = async (_, { title, content }, { dataSources, user }) => {
   
@@ -18,7 +18,9 @@ export const createArticle: MutationResolvers["createArticle"] = async (_, { tit
           content,
           authorId: user.id,
         },
-        include: { author: true },
+        include: {
+          author: true,
+        },
       });
         
       return {
@@ -27,10 +29,13 @@ export const createArticle: MutationResolvers["createArticle"] = async (_, { tit
         success: true,
         article: {
           ...article,
-          createdAt: article.createdAt.toISOString()
+          createdAt: article.createdAt.toISOString(),
+          comments: [],
+          likes: [],
         },
       };
     } catch (error) {
+      console.error("Erreur dans createArticle:", error);
       return {
         code: 500,
         message: "Erreur interne lors de la création de l'article",
@@ -39,4 +44,3 @@ export const createArticle: MutationResolvers["createArticle"] = async (_, { tit
       };
     }
   };
-  

@@ -4,7 +4,19 @@ export const getArticleById: QueryResolvers["getArticleById"] = async (_, { id }
   try {
     const article = await dataSources.db.article.findUniqueOrThrow({
       where: { id },
-      include: { author: true },
+      include: {
+        author: true,
+        comments: {
+          include: {
+            author: true,
+          },
+        },
+        likes: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
 
     return {
@@ -13,10 +25,19 @@ export const getArticleById: QueryResolvers["getArticleById"] = async (_, { id }
       message: "Article récupéré avec succès",
       article: {
         ...article,
-        createdAt: article.createdAt.toISOString()
+        createdAt: article.createdAt.toISOString(),
+        comments: (article.comments ?? []).map(comment => ({
+          ...comment,
+          createdAt: comment.createdAt.toISOString(),
+        })),
+        likes: (article.likes ?? []).map(like => ({
+          ...like,
+          createdAt: like.createdAt.toISOString(),
+        })),
       },
     };
   } catch (error) {
+    console.error("Erreur dans getArticleById:", error);
     return {
       code: 404,
       success: false,

@@ -4,21 +4,40 @@ export const getArticles: QueryResolvers["getArticles"] = async (_, __, { dataSo
   try {
     const articles = await dataSources.db.article.findMany({
       orderBy: { createdAt: "desc" },
-      include: { author: true },
+      include: {
+        author: true,
+        comments: {
+          include: {
+            author: true
+          },
+        },
+        likes: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
-
-    const formattedArticles = articles.map(article => ({
-      ...article,
-      createdAt: article.createdAt.toISOString(),
-    }));
 
     return {
       code: 200,
       success: true,
       message: "Articles récupérés avec succès",
-      articles: formattedArticles,
+      articles: articles.map(article => ({
+        ...article,
+        createdAt: article.createdAt.toISOString(),
+        comments: article.comments.map(comment => ({
+          ...comment,
+          createdAt: comment.createdAt.toISOString(),
+        })),
+        likes: article.likes.map(like => ({
+          ...like,
+          createdAt: like.createdAt.toISOString(),
+        })),
+      })),
     };
   } catch (error) {
+    console.error("Erreur dans getArticles:", error);
     return {
       code: 500,
       success: false,
