@@ -1,20 +1,48 @@
 import React from 'react'
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { gql, useMutation } from '@apollo/client';
+
+const REGISTER_MUTATION = gql`
+  mutation Register($username: String!, $password: String!) {
+    createUser(username: $username, password: $password) {
+      code
+      message
+      success
+      user {
+        id
+        username
+      }
+    }
+  }
+`;
 
 function Register() {
-    const [username,setUsername] = useState('')
-    const [password,setpassword] = useState('')
+    const navigate = useNavigate();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const [register, { loading }] = useMutation(REGISTER_MUTATION, {
+        onCompleted: (data) => {
+          const response = data.createUser;
+          if (response?.success) {
+            navigate("/login");
+          } else {
+            setErrorMessage(response?.message || "Erreur lors de l'inscription");
+          }
+        },
+        onError: (error) => {
+          setErrorMessage(error.message);
+        },
+    });
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // try {
-        //   await login({ variables: { email, password } });
-        // } catch (err) {
-        //   console.error('Erreur de connexion:', err);
-        // }
+        await register({ variables: { username, password } });
     };
+
   return (
     <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 50 }} transition={{ duration: 0.5 }} className='login-page d-flex justify-content-center align-items-center px-4'>
         <div className='login-wild-section d-flex gap-2'>
@@ -32,7 +60,7 @@ function Register() {
                       </div>
                       <div className="mb-3">
                           <label htmlFor="exampleInputPassword1" className="form-label">Mot de passe</label>
-                          <input type="password" className="form-control fw-bold fs-5" id="exampleInputPassword1" required value={password} onChange={(e)=>setpassword(e.target.value)}/>
+                          <input type="password" className="form-control fw-bold fs-5" id="exampleInputPassword1" required value={password} onChange={(e)=>setPassword(e.target.value)}/>
                       </div>
                       <div className="mb-3 mt-3">
                             <p className="text-center redirect">
@@ -44,18 +72,19 @@ function Register() {
                         </div>
 
                       <div className='d-flex justify-content-center mt-4'>
-                        <button type="submit" className="btn-submit rounded">S'inscrire
-                        {/* {
-                            (!showSpinner)?
+                        <button type="submit" className="btn-submit rounded" disabled={loading}>S'inscrire
+                        {
+                            (!loading )?
                             <i className="fa-solid fa-right-to-bracket"></i>
                             :
                             <div className="spinner-border" style={{width:"1.5rem", height: "1.5rem"}} role="status">
                                 <span className="visually-hidden">Loading...</span>
                             </div>
-                        } */}
+                        }
                         </button>
                       </div>
                   </form>
+                  {errorMessage && <p className="text-danger text-center fs-5">{errorMessage}</p>}
             </div>
         </div>
 
