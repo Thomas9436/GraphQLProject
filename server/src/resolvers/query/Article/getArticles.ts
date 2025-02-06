@@ -19,22 +19,26 @@ export const getArticles: QueryResolvers["getArticles"] = async (_, __, { dataSo
       },
     });
 
+    // Formatage des articles avec le likesCount
+    const formattedArticles = articles.map(article => ({
+      ...article,
+      createdAt: article.createdAt.toISOString(),
+      likesCount: article.likes.length,  // Compter le nombre de likes pour chaque article
+      comments: article.comments.map(comment => ({
+        ...comment,
+        createdAt: comment.createdAt.toISOString(),
+      })),
+      likes: article.likes.map(like => ({
+        ...like,
+        createdAt: like.createdAt.toISOString(),
+      })),
+    }));
+
     return {
       code: 200,
       success: true,
       message: "Articles récupérés avec succès",
-      articles: articles.map(article => ({
-        ...article,
-        createdAt: article.createdAt.toISOString(),
-        comments: article.comments.map(comment => ({
-          ...comment,
-          createdAt: comment.createdAt.toISOString(),
-        })),
-        likes: article.likes.map(like => ({
-          ...like,
-          createdAt: like.createdAt.toISOString(),
-        })),
-      })),
+      articles: formattedArticles,
     };
   } catch (error) {
     console.error("Erreur dans getArticles:", error);

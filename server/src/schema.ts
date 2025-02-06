@@ -7,7 +7,6 @@ export const typeDefs = gql`
         getArticles: GetArticlesResponse
         getArticleById(id: ID!): GetArticleByIdResponse
         getCommentsByArticle(articleId: ID!): GetCommentsResponse
-        getLikesByArticle(articleId: ID!): GetLikesResponse
     }
 
     type Mutation {
@@ -34,7 +33,6 @@ export const typeDefs = gql`
         message: String!
         article: Article
         comments: [Comment]
-        likes: [Like]
     }
 
     type GetArticlesResponse {
@@ -49,13 +47,6 @@ export const typeDefs = gql`
         success: Boolean!
         message: String!
         comments: [Comment!]!
-    }
-
-    type GetLikesResponse {
-        code: Int!
-        success: Boolean!
-        message: String!
-        likesCount: Int!
     }
 
     # Réponses pour les mutations
@@ -140,7 +131,8 @@ export const typeDefs = gql`
         createdAt: String!
         author: User!
         comments: [Comment!]!
-        likes: [Like!]!
+        likes: [Like!]!  # Tableau des "likes" associés à cet article
+        likesCount: Int!  # Nombre de "likes" associés à cet article
     }
 
     type Comment {

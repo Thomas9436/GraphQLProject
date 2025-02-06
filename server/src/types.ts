@@ -26,6 +26,7 @@ export type Article = {
   createdAt: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   likes: Array<Like>;
+  likesCount: Scalars['Int']['output'];
   title: Scalars['String']['output'];
 };
 
@@ -96,7 +97,6 @@ export type GetArticleByIdResponse = {
   article?: Maybe<Article>;
   code: Scalars['Int']['output'];
   comments?: Maybe<Array<Maybe<Comment>>>;
-  likes?: Maybe<Array<Maybe<Like>>>;
   message: Scalars['String']['output'];
   success: Scalars['Boolean']['output'];
 };
@@ -113,14 +113,6 @@ export type GetCommentsResponse = {
   __typename?: 'GetCommentsResponse';
   code: Scalars['Int']['output'];
   comments: Array<Comment>;
-  message: Scalars['String']['output'];
-  success: Scalars['Boolean']['output'];
-};
-
-export type GetLikesResponse = {
-  __typename?: 'GetLikesResponse';
-  code: Scalars['Int']['output'];
-  likesCount: Scalars['Int']['output'];
   message: Scalars['String']['output'];
   success: Scalars['Boolean']['output'];
 };
@@ -208,7 +200,6 @@ export type Query = {
   getArticleById?: Maybe<GetArticleByIdResponse>;
   getArticles?: Maybe<GetArticlesResponse>;
   getCommentsByArticle?: Maybe<GetCommentsResponse>;
-  getLikesByArticle?: Maybe<GetLikesResponse>;
   loggedUser?: Maybe<User>;
 };
 
@@ -219,11 +210,6 @@ export type QueryGetArticleByIdArgs = {
 
 
 export type QueryGetCommentsByArticleArgs = {
-  articleId: Scalars['ID']['input'];
-};
-
-
-export type QueryGetLikesByArticleArgs = {
   articleId: Scalars['ID']['input'];
 };
 
@@ -351,7 +337,6 @@ export type ResolversTypes = {
   GetArticleByIdResponse: ResolverTypeWrapper<GetArticleByIdResponse>;
   GetArticlesResponse: ResolverTypeWrapper<GetArticlesResponse>;
   GetCommentsResponse: ResolverTypeWrapper<GetCommentsResponse>;
-  GetLikesResponse: ResolverTypeWrapper<GetLikesResponse>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Like: ResolverTypeWrapper<Like>;
@@ -380,7 +365,6 @@ export type ResolversParentTypes = {
   GetArticleByIdResponse: GetArticleByIdResponse;
   GetArticlesResponse: GetArticlesResponse;
   GetCommentsResponse: GetCommentsResponse;
-  GetLikesResponse: GetLikesResponse;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Like: Like;
@@ -401,6 +385,7 @@ export type ArticleResolvers<ContextType = DataSourceContext, ParentType extends
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   likes?: Resolver<Array<ResolversTypes['Like']>, ParentType, ContextType>;
+  likesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -471,7 +456,6 @@ export type GetArticleByIdResponseResolvers<ContextType = DataSourceContext, Par
   article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType>;
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   comments?: Resolver<Maybe<Array<Maybe<ResolversTypes['Comment']>>>, ParentType, ContextType>;
-  likes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Like']>>>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -488,14 +472,6 @@ export type GetArticlesResponseResolvers<ContextType = DataSourceContext, Parent
 export type GetCommentsResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['GetCommentsResponse'] = ResolversParentTypes['GetCommentsResponse']> = {
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   comments?: Resolver<Array<ResolversTypes['Comment']>, ParentType, ContextType>;
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GetLikesResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['GetLikesResponse'] = ResolversParentTypes['GetLikesResponse']> = {
-  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  likesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -525,7 +501,6 @@ export type QueryResolvers<ContextType = DataSourceContext, ParentType extends R
   getArticleById?: Resolver<Maybe<ResolversTypes['GetArticleByIdResponse']>, ParentType, ContextType, RequireFields<QueryGetArticleByIdArgs, 'id'>>;
   getArticles?: Resolver<Maybe<ResolversTypes['GetArticlesResponse']>, ParentType, ContextType>;
   getCommentsByArticle?: Resolver<Maybe<ResolversTypes['GetCommentsResponse']>, ParentType, ContextType, RequireFields<QueryGetCommentsByArticleArgs, 'articleId'>>;
-  getLikesByArticle?: Resolver<Maybe<ResolversTypes['GetLikesResponse']>, ParentType, ContextType, RequireFields<QueryGetLikesByArticleArgs, 'articleId'>>;
   loggedUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
@@ -576,7 +551,6 @@ export type Resolvers<ContextType = DataSourceContext> = {
   GetArticleByIdResponse?: GetArticleByIdResponseResolvers<ContextType>;
   GetArticlesResponse?: GetArticlesResponseResolvers<ContextType>;
   GetCommentsResponse?: GetCommentsResponseResolvers<ContextType>;
-  GetLikesResponse?: GetLikesResponseResolvers<ContextType>;
   Like?: LikeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

@@ -8,6 +8,7 @@ import { resolvers } from "./resolvers.js";
 import db from "./datasources/db.js";
 import { getUser } from "./modules/auth.js";
 import { User } from "./types.js";
+import { pubsub } from "./pubsub.js";
 
 const app = express();
 
@@ -62,7 +63,7 @@ app.use(
       }
 
       return {
-        dataSources: {db},
+        dataSources: {db, pubsub},
         user: session.user || null,
       };
     },

@@ -26,6 +26,7 @@ export const getArticleById: QueryResolvers["getArticleById"] = async (_, { id }
       article: {
         ...article,
         createdAt: article.createdAt.toISOString(),
+        likesCount: article.likes.length,  // Calcul du nombre de likes
         comments: (article.comments ?? []).map(comment => ({
           ...comment,
           createdAt: comment.createdAt.toISOString(),
