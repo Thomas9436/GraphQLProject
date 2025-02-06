@@ -4,6 +4,7 @@ import HomeView from './views/HomeView'
 import Login from './views/Login'
 import Register from './views/Register'
 import ProtectedRoute from './components/ProtectedRoute'
+import { Toaster } from 'sonner'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      <Toaster richColors={true}/>
     </div>
   )
 }

@@ -2,6 +2,7 @@ import Post from './Post'
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Article as ArticleType, CreateArticleResponse } from '../gql/graphql';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 
 const CREATE_ARTICLE_MUTATION = gql`
@@ -62,6 +63,7 @@ function ListPosts() {
         setTitle('');
         setContent('');
         setErrorMessage(null);
+        toast.success('article créé avec succès')
       } else {
         setErrorMessage(response?.message || 'Erreur lors de la création de l\'article');
       }
@@ -81,7 +83,7 @@ function ListPosts() {
     },
   });
 
-  const { data, loading: loadingArticles, error: queryError } = useQuery(GET_ARTICLES_QUERY);
+  const { data, loading: loadingArticles, error: queryError, refetch  } = useQuery(GET_ARTICLES_QUERY);
 
   if (loadingArticles) return <p>Chargement des articles...</p>;
 
@@ -149,7 +151,7 @@ function ListPosts() {
                 <p>Aucun article disponible.</p>
               :
               articles?.map((article: ArticleType) => (
-                <Post key={article.id} article={article} />
+                <Post key={article.id} article={article} refetch={refetch} />
               ))
             }
             
