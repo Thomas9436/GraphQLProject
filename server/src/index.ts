@@ -7,14 +7,14 @@ import { typeDefs } from "./schema.js";
 import { resolvers } from "./resolvers.js";
 import db from "./datasources/db.js";
 import { getUser } from "./modules/auth.js";
-import { User } from "./types.js";
+import { UserModel } from "./models.js";  // Assure-toi que c'est bien UserModel et pas User !
 import { pubsub } from "./pubsub.js";
 
 const app = express();
 
 declare module "express-session" {
   interface SessionData {
-    user?: User;
+    user?: UserModel;  // Utilisation du bon type UserModel
   }
 }
 
@@ -46,24 +46,27 @@ const server = new ApolloServer({
 
 await server.start();
 
-// Middleware Apollo avec gestion des sessions
+// ✅ Correction du contexte dans Apollo Middleware
 app.use(
   "/graphql",
   express.json(),
   expressMiddleware(server, {
-    context: async ({ req }) => {
+    context: async ({ req }): Promise<{ dataSources: { db: typeof db; pubsub: typeof pubsub }; user: UserModel | null }> => {
       const { session } = req;
-      
-      const authorization = req.headers.authorization?.split("Bearer ")?.[1].trim();
+      const authorization = req.headers.authorization?.split("Bearer ")?.[1]?.trim();
 
-      const user = authorization ? getUser(authorization) : null;      
+      let user: UserModel | null = null;
 
-      if (user) {
-        session.user = user;
+      if (authorization) {
+        const userData = await getUser(authorization, db); // Récupération de l'utilisateur depuis le JWT
+        if (userData) {
+          user = { id: userData.id, username: userData.username }; // Assure-toi que c'est bien un UserModel
+          session.user = user;
+        }
       }
 
       return {
-        dataSources: {db, pubsub},
+        dataSources: { db, pubsub },
         user: session.user || null,
       };
     },

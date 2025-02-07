@@ -14,7 +14,7 @@ export const updateArticle: MutationResolvers["updateArticle"] = async (_, { id,
     // Vérifier si l'article existe et si l'utilisateur est l'auteur
     const existingArticle = await dataSources.db.article.findUniqueOrThrow({
       where: { id },
-      select: { authorId: true, title: true, content: true },
+      select: { authorId: true, title: true, content: true, createdAt: true },
     });
 
     if (existingArticle.authorId !== user.id) {
@@ -33,19 +33,6 @@ export const updateArticle: MutationResolvers["updateArticle"] = async (_, { id,
         title: title ?? existingArticle.title,
         content: content ?? existingArticle.content,
       },
-      include: {
-        author: true,
-        comments: {
-          include: {
-            author: true
-          },
-        },
-        likes: {
-          include: {
-            user: true
-          },
-        },
-      },
     });
 
     return {
@@ -55,15 +42,6 @@ export const updateArticle: MutationResolvers["updateArticle"] = async (_, { id,
       article: {
         ...updatedArticle,
         createdAt: updatedArticle.createdAt.toISOString(),
-        author: updatedArticle.author,
-        comments: updatedArticle.comments.map(comment => ({
-          ...comment,
-          createdAt: comment.createdAt.toISOString(),
-        })),
-        likes: updatedArticle.likes.map(like => ({
-          ...like,
-          createdAt: like.createdAt.toISOString(),
-        })),
       },
     };
   } catch (error) {

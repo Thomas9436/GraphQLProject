@@ -4,20 +4,10 @@ export const getArticleById: QueryResolvers["getArticleById"] = async (_, { id }
   try {
     const article = await dataSources.db.article.findUniqueOrThrow({
       where: { id },
-      include: {
-        author: true,
-        comments: {
-          include: {
-            author: true,
-          },
-        },
-        likes: {
-          include: {
-            user: true,
-          },
-        },
-      },
     });
+
+    const likes = await dataSources.db.like.findMany({ where: { articleId: id } }) || [];
+    const comments = await dataSources.db.comment.findMany({ where: { articleId: id } }) || [];
 
     return {
       code: 200,
@@ -26,15 +16,12 @@ export const getArticleById: QueryResolvers["getArticleById"] = async (_, { id }
       article: {
         ...article,
         createdAt: article.createdAt.toISOString(),
-        likesCount: article.likes.length,  // Calcul du nombre de likes
-        comments: (article.comments ?? []).map(comment => ({
+        likesCount: likes.length,
+        likes,  
+        comments: comments.map(comment => ({
           ...comment,
           createdAt: comment.createdAt.toISOString(),
-        })),
-        likes: (article.likes ?? []).map(like => ({
-          ...like,
-          createdAt: like.createdAt.toISOString(),
-        })),
+        })),  
       },
     };
   } catch (error) {

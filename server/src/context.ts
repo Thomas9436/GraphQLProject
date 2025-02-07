@@ -1,6 +1,6 @@
-import { AuthenticatedUser } from "./modules/auth.js";
 import { PrismaClient } from "@prisma/client"
 import { PubSub } from 'graphql-subscriptions';
+import { UserModel } from "./models.js";
 
 
 export type DataSourceContext = {
@@ -8,5 +8,5 @@ export type DataSourceContext = {
     db: PrismaClient
     pubsub: PubSub
   };
-  user: AuthenticatedUser | null
+  user: UserModel | null
 };

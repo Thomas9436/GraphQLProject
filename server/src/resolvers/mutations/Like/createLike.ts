@@ -12,19 +12,16 @@ export const createLike: MutationResolvers["createLike"] = async (_, { articleId
   }
 
   try {
-    // Ajouter le like
+    // Ajouter le like sans inclure l'utilisateur
     const newLike = await dataSources.db.like.create({
       data: {
         userId: user.id,
         articleId: articleId,
       },
-      include: {
-        user: true,  // Inclure l'utilisateur dans la réponse
-      },
     });
 
     // Publier l'événement pour notifier tous les abonnés
-    pubsub.publish(`${articleId}_likeUpdated`, { likeUpdated: newLike });  // Publier l'événement
+    pubsub.publish(`${articleId}_likeUpdated`, { likeUpdated: newLike });
 
     return {
       code: 200,
@@ -34,10 +31,7 @@ export const createLike: MutationResolvers["createLike"] = async (_, { articleId
         id: newLike.id,
         articleId: newLike.articleId,
         userId: newLike.userId,
-        user: {
-          id: newLike.user.id,
-          username: newLike.user.username,
-        },
+        createdAt: newLike.createdAt,
       },
     };
   } catch (error) {

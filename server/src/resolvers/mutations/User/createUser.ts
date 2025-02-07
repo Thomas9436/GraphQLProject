@@ -16,7 +16,7 @@ export const createUser: MutationResolvers['createUser'] = async (_, {username, 
         success: true,
         user: {
           id: user.id,
-          username: user.username
+          username: user.username,
         }
       }
     } catch (err) {

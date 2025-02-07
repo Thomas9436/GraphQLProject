@@ -18,9 +18,6 @@ export const createArticle: MutationResolvers["createArticle"] = async (_, { tit
           content,
           authorId: user.id,
         },
-        include: {
-          author: true,
-        },
       });
         
       return {
@@ -30,8 +27,6 @@ export const createArticle: MutationResolvers["createArticle"] = async (_, { tit
         article: {
           ...article,
           createdAt: article.createdAt.toISOString(),
-          comments: [],
-          likes: [],
         },
       };
     } catch (error) {
