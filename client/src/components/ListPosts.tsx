@@ -1,9 +1,13 @@
 import Post from './Post'
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { Article as ArticleType, CreateArticleResponse } from '../gql/graphql';
+import { ApolloError, gql, useMutation, useQuery } from "@apollo/client";
+import { Article, Article as ArticleType, CreateArticleResponse } from '../gql/graphql';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+interface ListPostProps {
+  articles: Article[];
+  refetch: () => void;
+}
 
 const CREATE_ARTICLE_MUTATION = gql`
   mutation CreateArticle($title: String!, $content: String!) {
@@ -21,44 +25,8 @@ const CREATE_ARTICLE_MUTATION = gql`
   }
 `;
 
-const GET_ARTICLES_QUERY = gql`
-  query GetArticles {
-    getArticles {
-      code
-      message
-      success
-      articles {
-        id
-        title
-        content
-        likes {
-          user {
-            id
-          }
-          id
-          articleId
-        }
-        comments {
-          content
-          author {
-            id
-            username
-          }
-          createdAt
-          articleId
-          id
-        }
-        createdAt
-        author {
-          id
-          username
-        }
-      }
-    }
-  }
-`;
 
-function ListPosts() {
+const ListPosts: React.FC<ListPostProps> = ({articles, refetch}) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -90,14 +58,7 @@ function ListPosts() {
     },
   });
 
-  const { data, loading: loadingArticles, error: queryError, refetch  } = useQuery(GET_ARTICLES_QUERY);
-
-  if (loadingArticles) return <p>Chargement des articles...</p>;
-
-  // En cas d'erreur lors de la récupération des articles
-  if (queryError) return <p>Erreur : {queryError.message}</p>;
-
-  const articles = data?.getArticles?.articles;
+  
 
   // Gérer la soumission du formulaire
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

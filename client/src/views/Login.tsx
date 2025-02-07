@@ -2,11 +2,12 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 
-import { SignInUserResponse } from '../gql/graphql';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { toast } from 'sonner';
 
-const SIGNIN_MUTATION = gql`
+import {gql} from "../gql/gql"
+
+const SIGNIN_MUTATION = gql(`
   mutation SignIn($username: String!, $password: String!) {
     signIn(username: $username, password: $password) {
       code
@@ -15,20 +16,20 @@ const SIGNIN_MUTATION = gql`
       token
     }
   }
-`;
+`)
   
 function Login() {
     const navigate = useNavigate();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     
-    const [signIn, { loading }] = useMutation<SignInUserResponse, { username: string; password: string }>(
+    const [signIn, { loading }] = useMutation(
         SIGNIN_MUTATION,
         {
           onCompleted: (data) => {
             const response = data.signIn;
             console.log(data)
-            if (response.token && response.success) {
+            if (response?.token && response?.success) {
               // Stocker le token dans le localStorage
               toast.success("Vous êtes connecté !")
               localStorage.setItem('token', response.token);
