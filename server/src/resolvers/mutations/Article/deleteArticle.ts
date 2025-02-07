@@ -10,10 +10,18 @@ export const deleteArticle: MutationResolvers["deleteArticle"] = async (_, { id 
       };
     }
 
-    const existingArticle = await dataSources.db.article.findUniqueOrThrow({
+    const existingArticle = await dataSources.db.article.findUnique({
       where: { id },
       select: { authorId: true },
     });
+
+    if (!existingArticle) {
+      return {
+        code: 404,
+        message: "Article non trouvé",
+        success: false,
+      };
+    }
 
     if (existingArticle.authorId !== user.id) {
       return {
@@ -23,6 +31,17 @@ export const deleteArticle: MutationResolvers["deleteArticle"] = async (_, { id 
       };
     }
 
+    // Supprimer les commentaires liés à l'article
+    await dataSources.db.comment.deleteMany({
+      where: { articleId: id },
+    });
+
+    // Supprimer les likes liés à l'article
+    await dataSources.db.like.deleteMany({
+      where: { articleId: id },
+    });
+
+    // Supprimer l'article
     await dataSources.db.article.delete({
       where: { id },
     });
@@ -33,6 +52,7 @@ export const deleteArticle: MutationResolvers["deleteArticle"] = async (_, { id 
       success: true,
     };
   } catch (error) {
+    console.error("Delete Article Error:", error);
     return {
       code: 500,
       message: "Erreur interne lors de la suppression de l'article",
