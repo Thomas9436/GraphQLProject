@@ -62,8 +62,29 @@ L'objectif du projet est de fournir une API performante et flexible pour la gest
    git clone https://github.com/Thomas9436/GraphQLProject & cd GraphQLProject
    `
 
-2. **Installation du projet via Docker Compose**  
-   `docker compose up --build`
+2. **Installation des dépendances**  
+   - Pour le backend  
+     `bash
+     cd server
+     npm install
+     `
+   - Pour le frontend  
+     `bash
+     cd client
+     npm install
+     `
+
+3. **Démarrer les serveurs**  
+   - Lancer le backend  
+     `bash
+     cd server
+     npm run dev
+     `
+   - Lancer le frontend  
+     `bash
+     cd client
+     npm run server
+     `
 
 ---
 
