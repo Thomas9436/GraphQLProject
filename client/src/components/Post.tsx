@@ -42,8 +42,8 @@ import EditArticleModal from './EditArticleModal';
   `;
 
   const DELETE_ARTICLE_MUTATION = gql`
-    mutation DeleteArticle($id: ID!) {
-      deleteArticle(id: $id) {
+    mutation DeleteArticle($deleteArticleId: ID!) {
+      deleteArticle(id: $deleteArticleId) {
         code
         message
         success
@@ -82,11 +82,12 @@ import EditArticleModal from './EditArticleModal';
   const Post: React.FC<ArticleProps> = ({ article, refetch }) => {
     const [selectedComment, setSelectedComment] = useState<{ id: string; content: string } | null>(null);
     const [selectedArticle, setSelectedArticle] = useState<{ id: string; title: string; content: string } | null>(null);
-    const [updateData, setUpdateData] = useState<{content: string, id: string} | null>(null)
+    const [isExpanded, setIsExpanded] = useState<boolean>(false)
     const { user } = useAuth();
     const [content, setContent] = useState("");
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     let isLiked = article.likes.find(like => like.user.id === user?.id) ? true : false
+    const commentShow = article.comments.slice(0, (isExpanded ? article.comments.length : 2))
 
     const [deleteArticle, { loading, error }] = useMutation(DELETE_ARTICLE_MUTATION, {
       onCompleted: (data) => {
@@ -107,7 +108,7 @@ import EditArticleModal from './EditArticleModal';
       toast('Voulez-vous vraiment supprimer cet article ?', {
         action: {
           label: 'Oui',
-          onClick: () => deleteArticle({ variables: { id: article.id } }),
+          onClick: () => deleteArticle({ variables: { deleteArticleId: article.id } }),
         },
       });
     };
@@ -300,7 +301,7 @@ import EditArticleModal from './EditArticleModal';
                     article.comments.length === 0 ? 
                     <p className='text-center text-muted'>Soyez le premier à commenter cet article</p>
                     :
-                    article.comments.map(comment => (
+                    commentShow.map(comment => (
                       <div className='comment d-flex gap-2'>
                         <div className='d-flex justify-content-between w-100 align-items-center'>
                           <p className='p-0 m-0 d-flex justify-content-center gap-2'>
@@ -332,7 +333,12 @@ import EditArticleModal from './EditArticleModal';
                 {
                   article.comments.length > 3 &&
                   <div className='border-top mt-3 text-center'>
-                    <button className='btn text-primary btn-sm border-0 m-0 p-0 '>Voir tous les commentaires</button>
+                    {
+                      isExpanded ?
+                      <button className='btn text-primary btn-sm border-0 m-0 p-0 ' onClick={() => setIsExpanded(false)}>Réduire les commentaires</button>
+                      :
+                      <button className='btn text-primary btn-sm border-0 m-0 p-0 ' onClick={() => setIsExpanded(true)}>Voir tous les commentaires</button>
+                    }
                   </div>
                 }
                 
