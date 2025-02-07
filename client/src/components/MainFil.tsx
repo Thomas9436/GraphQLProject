@@ -4,7 +4,6 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { Article } from "../gql/graphql";
 
 
-
 const GET_ARTICLES_QUERY = gql`
   query GetArticles {
     getArticles {

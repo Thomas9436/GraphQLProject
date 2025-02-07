@@ -1,5 +1,5 @@
 import Post from './Post'
-import { ApolloError, gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { Article, Article as ArticleType, CreateArticleResponse } from '../gql/graphql';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -8,6 +8,43 @@ interface ListPostProps {
   articles: Article[];
   refetch: () => void;
 }
+
+const GET_ARTICLES_QUERY = gql`
+  query GetArticles {
+    getArticles {
+      code
+      message
+      success
+      articles {
+        id
+        title
+        content
+        likes {
+          user {
+            id
+          }
+          id
+          articleId
+        }
+        comments {
+          content
+          author {
+            id
+            username
+          }
+          createdAt
+          articleId
+          id
+        }
+        createdAt
+        author {
+          id
+          username
+        }
+      }
+    }
+  }
+`;
 
 const CREATE_ARTICLE_MUTATION = gql`
   mutation CreateArticle($title: String!, $content: String!) {
