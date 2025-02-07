@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { gql, useMutation } from '@apollo/client';
+import { toast } from 'sonner';
 
 const REGISTER_MUTATION = gql`
   mutation Register($username: String!, $password: String!) {
@@ -22,19 +23,19 @@ function Register() {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const [register, { loading }] = useMutation(REGISTER_MUTATION, {
         onCompleted: (data) => {
           const response = data.createUser;
           if (response?.success) {
+            toast.success("Votre compte a été créé avec succès !")
             navigate("/login");
           } else {
-            setErrorMessage(response?.message || "Erreur lors de l'inscription");
+            toast.error("Erreur lors de l'inscription");
           }
         },
         onError: (error) => {
-          setErrorMessage(error.message);
+          toast.error(error.message);
         },
     });
 
@@ -84,7 +85,6 @@ function Register() {
                         </button>
                       </div>
                   </form>
-                  {errorMessage && <p className="text-danger text-center fs-5">{errorMessage}</p>}
             </div>
         </div>
 

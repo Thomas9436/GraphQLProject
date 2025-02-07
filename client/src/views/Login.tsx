@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router';
 
 import { SignInUserResponse } from '../gql/graphql';
 import { gql, useMutation } from '@apollo/client';
+import { toast } from 'sonner';
 
 const SIGNIN_MUTATION = gql`
   mutation SignIn($username: String!, $password: String!) {
@@ -20,7 +21,6 @@ function Login() {
     const navigate = useNavigate();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     
     const [signIn, { loading }] = useMutation<SignInUserResponse, { username: string; password: string }>(
         SIGNIN_MUTATION,
@@ -30,15 +30,16 @@ function Login() {
             console.log(data)
             if (response.token && response.success) {
               // Stocker le token dans le localStorage
+              toast.success("Vous êtes connecté !")
               localStorage.setItem('token', response.token);
               // Rediriger l'utilisateur vers la page d'accueil
               navigate('/');
             } else {
-              setErrorMessage('Erreur lors de la connexion');
+              toast.error("Erreur lors de la connexion")
             }
           },
           onError: (error) => {
-            setErrorMessage(error.message);
+            toast.error("Erreur lors de la connexion")
           },
         }
       );
@@ -68,7 +69,6 @@ function Login() {
                           <label htmlFor="exampleInputPassword1" className="form-label">Mot de passe</label>
                           <input type="password" className="form-control fw-bold fs-5" id="exampleInputPassword1" required value={password} onChange={(e)=>setPassword(e.target.value)}/>
                       </div>
-                      {errorMessage && <p className="text-danger text-center fs-6">{errorMessage}</p>}
                       <div className="mb-3 mt-3">
                             <p className="text-center redirect">
                                 Vous n'avez pas de compte ? &nbsp;

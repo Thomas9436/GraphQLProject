@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { gql, useQuery } from "@apollo/client";
+import { toast } from "sonner";
 
 // Définir la requête GraphQL
 const LOGGED_USER_QUERY = gql`
@@ -37,6 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
+    toast.success('Deconnexion réeussie !')
     window.location.href = "/login"; // Redirection vers la page de connexion
   };
 

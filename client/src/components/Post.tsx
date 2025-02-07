@@ -235,7 +235,7 @@ import EditArticleModal from './EditArticleModal';
         return `Il y a ${days} ${days > 1 ? 'jours' : 'jour'}`;
       } else if (diffInSeconds < year) {
         const months = Math.floor(diffInSeconds / month);
-        return `Il y a ${months} ${months > 1 ? 'mois' : 'mois'}`;
+        return `Il y a ${months} mois`;
       } else {
         const years = Math.floor(diffInSeconds / year);
         return `Il y a ${years} ${years > 1 ? 'ans' : 'an'}`;
